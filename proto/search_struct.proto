@@ -1,0 +1,37 @@
+syntax = "proto3";
+option go_package = "./stub";
+package stub;
+
+message GetSearchReq{
+  string keyword = 1;
+  int32 start = 2;
+}
+
+
+message GetSearchRsp{
+  int32 code = 1;
+  string msg = 2;
+  repeated SearchList list = 3;
+}
+
+message SearchList {
+  int32 sid = 1;
+  string album = 2;//专辑
+  string photo = 3;//壁纸
+  string sender = 4; //头像
+  string dates = 5;//时间
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

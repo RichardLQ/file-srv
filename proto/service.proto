@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+option go_package = "./stub";
+import "google/api/annotations.proto";
+import "pics_struct.proto";
+import "banner_struct.proto";
+import "search_struct.proto";
+package stub;
+
+service FixService {
+  //图片
+  rpc GetPicCategory1 (GetPicCategory1Req) returns (GetPicCategory1Rsp){
+    option (google.api.http) = {//图片分类
+      post: "/pic/category",
+      body: "*"
+    };
+  }
+
+  rpc GetPicList1 (GetPicList1Req) returns (GetPicList1Rsp){
+    option (google.api.http) = {//获取图片列表
+      post: "/pic/list",
+      body: "*"
+    };
+  }
+
+  rpc GetHotPicList1 (GetHotPicList1Req) returns (GetPicList1Rsp){
+    option (google.api.http) = {//获取热门推荐
+      post: "/pic/hot",
+      body: "*"
+    };
+  }
+
+  rpc GetBanner (GetBannerReq) returns (GetBannerRsp){
+    option (google.api.http) = {//获取banner
+      post: "/index/banner",
+      body: "*"
+    };
+  }
+
+  rpc GetSearchList (GetSearchReq) returns (GetSearchRsp){
+    option (google.api.http) = {//获取搜索列表
+      post: "/index/search",
+      body: "*"
+    };
+  }
+
+}
