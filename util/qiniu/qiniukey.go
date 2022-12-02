@@ -7,6 +7,7 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/hex"
+	"github.com/RichardLQ/file-srv/auth"
 	"github.com/qiniu/go-sdk/v7/auth/qbox"
 	"github.com/qiniu/go-sdk/v7/storage"
 	"io"
@@ -17,8 +18,6 @@ import (
 )
 
 const (
-	ACCESS_KEY = "MQUnVFi5W6YPDHkasxm5btuo3hW3QHeZJIqUX7oL"
-	SECRET_KEY = "62Z_JQ9PvuVUoK5wIApSOR4ls3CGOmpk1RSVaJH2"
 	QINIU_BUCKET = "sourcandy"
 	NETWORK_PREFIX = "https://cdn.sourcandy.cn/"
 )
@@ -30,7 +29,7 @@ func QiNiu_UpLoadFile(localFile,prefix,names string) (address,fileName, certific
 		Scope: QINIU_BUCKET,
 		ReturnBody: `{"key":"$(key)","hash":"$(etag)","fsize":$(fsize),"bucket":"$(bucket)","name":"$(x:name)"}`,
 	}
-	mac := qbox.NewMac(ACCESS_KEY, SECRET_KEY)
+	mac := qbox.NewMac(auth.Global.Qiniu_OSS.ACCESS_KEY, auth.Global.Qiniu_OSS.SECRET_KEY)
 	upToken := putPolicy.UploadToken(mac)
 	cfg := storage.Config{}
 	// 空间对应的机房
@@ -68,7 +67,7 @@ func QiNiu_ByteUploadFile(localFile,prefix,names string) (address,fileName, cert
 	putPolicy := storage.PutPolicy{
 		Scope: QINIU_BUCKET,
 	}
-	mac := qbox.NewMac(ACCESS_KEY, SECRET_KEY)
+	mac := qbox.NewMac(auth.Global.Qiniu_OSS.ACCESS_KEY, auth.Global.Qiniu_OSS.SECRET_KEY)
 	upToken := putPolicy.UploadToken(mac)
 	cfg := storage.Config{}
 	// 空间对应的机房
@@ -123,7 +122,7 @@ func QiNiu_SourceUploadFile(source *multipart.FileHeader,prefix,names string) (a
 	putPolicy := storage.PutPolicy{
 		Scope: QINIU_BUCKET,
 	}
-	mac := qbox.NewMac(ACCESS_KEY, SECRET_KEY)
+	mac := qbox.NewMac(auth.Global.Qiniu_OSS.ACCESS_KEY, auth.Global.Qiniu_OSS.SECRET_KEY)
 	upToken := putPolicy.UploadToken(mac)
 	cfg := storage.Config{}
 	// 空间对应的机房
@@ -171,7 +170,7 @@ func Prefix(prefix string) (string,error) {
 }
 
 func QiNiu_DeleteFile(adder string) error {
-	mac := qbox.NewMac(ACCESS_KEY, SECRET_KEY)
+	mac := qbox.NewMac(auth.Global.Qiniu_OSS.ACCESS_KEY, auth.Global.Qiniu_OSS.SECRET_KEY)
 	cfg := storage.Config{}
 	// 空间对应的机房
 	cfg.Zone = &storage.ZoneHuanan

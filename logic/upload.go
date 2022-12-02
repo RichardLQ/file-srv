@@ -23,25 +23,27 @@ func UploadImage(c *gin.Context)  {
 	if err != nil {
 		c.String(500, "上传图片出错")
 	}
-	str1,_,_,err:=qiniu.QiNiu_SourceUploadFile(file,"load","")
-	if err !=nil {
-		c.JSON(http.StatusOK, gin.H{"ret":"上传失败","data":"","err":err,"code":-1})
-		return
-	}
-	if str1 != "" {
-		pic := uploads.UploadFile{
-			Uid:uid,
-			Openid: openid,
-			Address: str1,
-			Type: types,
-			Createtime: time.Now().Format(refer.FORMATDATELONG),
-		}
-		err:=pic.Create()
+	go func() {
+		str1,_,_,err:=qiniu.QiNiu_SourceUploadFile(file,"load","")
 		if err !=nil {
-			c.JSON(http.StatusOK, gin.H{"ret":"上传失败","data":"","err":err,"code":-2})
+			c.JSON(http.StatusOK, gin.H{"ret":"上传失败","data":"","err":err,"code":-1})
 			return
 		}
-	}
-	c.JSON(http.StatusOK, gin.H{"ret":"成功","data":str1,"err":"","code":http.StatusOK})
+		if str1 != "" {
+			pic := uploads.UploadFile{
+				Uid:uid,
+				Openid: openid,
+				Address: str1,
+				Type: types,
+				Createtime: time.Now().Format(refer.FORMATDATELONG),
+			}
+			err:=pic.Create()
+			if err !=nil {
+				c.JSON(http.StatusOK, gin.H{"ret":"上传失败","data":"","err":err,"code":-2})
+				return
+			}
+		}
+	}()
+	c.JSON(http.StatusOK, gin.H{"ret":"成功","data":"","err":"","code":http.StatusOK})
 	return
 }
