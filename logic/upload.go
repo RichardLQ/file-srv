@@ -15,6 +15,7 @@ func UploadImage(c *gin.Context)  {
 	file, err := c.FormFile("file")
 	openid := c.PostForm("openid")
 	types,_:=strconv.Atoi(c.PostForm("types"))
+	uid,_:=strconv.Atoi(c.PostForm("uid"))
 	if openid == ""  {
 		c.JSON(http.StatusOK, gin.H{"ret":"查询失败","data":"","err":"参数缺失","code":refer.PARAM_LACK})
 		return
@@ -29,6 +30,7 @@ func UploadImage(c *gin.Context)  {
 	}
 	if str1 != "" {
 		pic := uploads.UploadFile{
+			Uid:uid,
 			Openid: openid,
 			Address: str1,
 			Type: types,

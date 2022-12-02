@@ -2,16 +2,16 @@ package main
 
 import (
 	"github.com/RichardLQ/confs"
+	"github.com/RichardLQ/file-srv/auth"
 	"github.com/RichardLQ/file-srv/route"
-	"github.com/RichardLQ/fix-srv/client"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	confs.NewStart().BinComb(&client.Global)
+	confs.NewStart().BinComb(&auth.Global)
 	e := gin.Default()
 	route.IndexRouter(e)
-	e.Run(client.Global.FileServiceConf.HttpIp+":"+
-		client.Global.FileServiceConf.HttpPort)
+	e.Run(auth.Global.FileServiceConf.HttpIp+":"+
+		auth.Global.FileServiceConf.HttpPort)
 }
 
