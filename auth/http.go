@@ -9,21 +9,21 @@ import (
 )
 
 //SendHttpRequest 发送HTTP请求
-func SendHttpRequest(url,method ,body string,cookies []http.Cookie,headers []map[string]string) (string,error){
+func SendHttpRequest(url, method, body string, cookies []http.Cookie, headers []map[string]string) (string, error) {
 	if method == "" {
 		method = "GET"
 	}
 	var client = &http.Client{
-		Transport:     &http.Transport{
-			Proxy:                  nil,
-			DialContext:            (&net.Dialer{
-				Timeout:       5*time.Second,
+		Transport: &http.Transport{
+			Proxy: nil,
+			DialContext: (&net.Dialer{
+				Timeout: 5 * time.Second,
 			}).DialContext,
-			ForceAttemptHTTP2:      true,
+			ForceAttemptHTTP2: true,
 		},
 		CheckRedirect: nil,
 		Jar:           nil,
-		Timeout:       5*time.Second,
+		Timeout:       5 * time.Second,
 	}
 	var req *http.Request
 
@@ -40,20 +40,19 @@ func SendHttpRequest(url,method ,body string,cookies []http.Cookie,headers []map
 	//设置Header
 	if nil != headers && len(headers) > 0 {
 		for i := range headers {
-			for k,v := range headers[i] {
-				req.Header.Add(k,v)
+			for k, v := range headers[i] {
+				req.Header.Add(k, v)
 			}
 		}
 	}
 
 	//发送请求
-	resp,err := client.Do(req)
-	if err != nil{
-		return "",err
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", err
 	}
 	defer req.Body.Close()
 	buf := bytes.Buffer{}
 	buf.ReadFrom(resp.Body)
-	return buf.String(),nil
+	return buf.String(), nil
 }
-
