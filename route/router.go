@@ -11,3 +11,4 @@ func IndexRouter(e *gin.Engine) {
 		v1.POST("/uploadImage", logic.UploadImage)//上传图片
 	}
 }
+
