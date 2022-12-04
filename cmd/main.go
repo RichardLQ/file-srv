@@ -11,6 +11,7 @@ func main() {
 	confs.NewStart().BinComb(&auth.Global)
 	e := gin.Default()
 	route.IndexRouter(e)
+	route.AuthRouter(e)
 	e.Run(auth.Global.FileServiceConf.HttpIp+":"+
 		auth.Global.FileServiceConf.HttpPort)
 }

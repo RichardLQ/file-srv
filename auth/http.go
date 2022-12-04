@@ -2,6 +2,8 @@ package auth
 
 import (
 	"bytes"
+	"fmt"
+	"github.com/garyburd/redigo/redis"
 	"net"
 	"net/http"
 	"strings"
@@ -55,4 +57,14 @@ func SendHttpRequest(url, method, body string, cookies []http.Cookie, headers []
 	buf := bytes.Buffer{}
 	buf.ReadFrom(resp.Body)
 	return buf.String(), nil
+}
+
+//RedisConn redis的连接
+func RedisConn() redis.Conn {
+	c, err := redis.Dial("tcp", "localhost:6379")
+	if err != nil {
+		fmt.Println("conn redis failed,", err)
+		return nil
+	}
+	return c
 }
