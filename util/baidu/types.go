@@ -34,6 +34,7 @@ type UploadArg struct {
 	LocalFile string `json:"local_file"`
 	Partseq   int    `json:"partseq"`
 	Files *multipart.FileHeader `json:"files"`
+	FileSize int `json:"file_size"`
 }
 
 // 创建 UploadArg 实例

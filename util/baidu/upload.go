@@ -7,44 +7,34 @@ import (
 	"io"
 	"mime/multipart"
 	"net/url"
-	"os"
 	"strconv"
 )
 
 func Upload(accessToken string, arg *UploadArg) (UploadReturn, error) {
 	ret := UploadReturn{}
-
-	////打开文件句柄操作
+	//打开文件句柄操作
 	//fileHandle, err := os.Open(arg.LocalFile)
-	var fileHandle *os.File
-	ss,_:=arg.Files.Open()
-	_, err := io.Copy(fileHandle, ss)
-	if err != nil {
-		return ret, errors.New("superfile2 open file failed")
-	}
-	defer fileHandle.Close()
-
-	// 获取文件当前信息
-	fileInfo, err := fileHandle.Stat()
-	if err != nil {
-		return ret, err
-	}
-	arg.Files.Open()
+	//if err != nil {
+	//	return ret, errors.New("superfile2 open file failed")
+	//}
+	//defer fileHandle.Close()
+	//
+	//// 获取文件当前信息
+	//fileInfo, err := fileHandle.Stat()
+	//if err != nil {
+	//	return ret, err
+	//}
+	fileInfo,_:=arg.Files.Open()
 	// 读取文件块
-	buf := make([]byte, fileInfo.Size())
-	n, err := fileHandle.Read(buf)
-	if err != nil {
-		if err != io.EOF {
-			return ret, err
-		}
-	}
+	//buf := make([]byte, fileInfo.Size())
+	buf := make([]byte, arg.Files.Size)
+	n, _ := fileInfo.Read(buf)
 	bodyBuf := &bytes.Buffer{}
 	bodyWriter := multipart.NewWriter(bodyBuf)
 	fileWriter, err := bodyWriter.CreateFormFile("file", "file")
 	if err != nil {
 		return ret, err
 	}
-
 	//iocopy
 	_, err = io.Copy(fileWriter, bytes.NewReader(buf[0:n]))
 	if err != nil {
@@ -57,7 +47,6 @@ func Upload(accessToken string, arg *UploadArg) (UploadReturn, error) {
 	host := "d.pcs.baidu.com"
 	router := "/rest/2.0/pcs/superfile2?method=upload&"
 	uri := protocal + "://" + host + router
-
 	params := url.Values{}
 	params.Set("access_token", accessToken)
 	params.Set("path", arg.Path)

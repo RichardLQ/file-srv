@@ -66,7 +66,7 @@ func SendHttpRequest(url, method, body string, cookies []http.Cookie, headers []
 
 //RedisConn redis的连接
 func RedisConn() redis.Conn {
-	c, err := redis.Dial("tcp", "localhost:2000")
+	c, err := redis.Dial("tcp", "localhost:6379")
 	if err != nil {
 		fmt.Println("conn redis failed,", err)
 		return nil

@@ -36,6 +36,7 @@ func GetBaiduPrecreate(c *gin.Context)  {
 	files,_:=c.FormFile("files")
 	path := "/uploads/" + files.Filename
 	size := files.Size
+	fmt.Println(size)
 	var blockList []string
 	listString,_:=auth.FileOpenMD5(files)
 	blockList = append(blockList, listString)
@@ -43,11 +44,22 @@ func GetBaiduPrecreate(c *gin.Context)  {
 	if ret, err := baidu.Precreate(token, arg); err != nil {
 		fmt.Printf("[msg: precreate error] [err:%v]", err.Error())
 	} else {
-		fmt.Printf("ret:%+v", ret)
 		getBaiduSuperfile(ret.UploadId,path,token,files)
-
+		getBaiduCreate(ret.UploadId,path,token,blockList,uint64(size))
 	}
 }
+
+//getBaiduCreate 分片上传
+func getBaiduCreate(uploadId,path,token string,blockList []string,size uint64)  {
+	// // call create API
+	arg := baidu.NewCreateArg(uploadId, path, size, blockList)
+	if ret, err := baidu.Create(token, arg); err != nil {
+		fmt.Printf("[msg: create this part error] [err:%v]", err.Error())
+	} else {
+		fmt.Printf("ret:%+v\n", ret)
+	}
+}
+
 
 //GetBaiduSuperfile2 分片上传
 func getBaiduSuperfile(uploadId,path,token string,file *multipart.FileHeader)  {
