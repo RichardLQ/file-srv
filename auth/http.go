@@ -2,10 +2,15 @@ package auth
 
 import (
 	"bytes"
+	"crypto/md5"
+	"encoding/hex"
 	"fmt"
 	"github.com/garyburd/redigo/redis"
+	"io"
+	"mime/multipart"
 	"net"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 )
@@ -61,10 +66,35 @@ func SendHttpRequest(url, method, body string, cookies []http.Cookie, headers []
 
 //RedisConn redis的连接
 func RedisConn() redis.Conn {
-	c, err := redis.Dial("tcp", "localhost:6379")
+	c, err := redis.Dial("tcp", "localhost:2000")
 	if err != nil {
 		fmt.Println("conn redis failed,", err)
 		return nil
 	}
 	return c
+}
+
+//FileMD5 文件md5名称
+func FileMD5(filePath string) (string, error) {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return "", err
+	}
+	hash := md5.New()
+	_, _ = io.Copy(hash, file)
+	return hex.EncodeToString(hash.Sum(nil)), nil
+}
+
+func FileOpenMD5(files *multipart.FileHeader) (string, error) {
+	//file, err := os.Open(filePath)
+	//if err != nil {
+	//	return "", err
+	//}
+	file, err := files.Open()
+	if err != nil {
+		return "", err
+	}
+	hash := md5.New()
+	_, _ = io.Copy(hash, file)
+	return hex.EncodeToString(hash.Sum(nil)), nil
 }

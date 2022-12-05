@@ -364,7 +364,6 @@ github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/PuerkitoBio/goquery v1.5.1/go.mod h1:GsLWisAFVj4WgDibEWF4pvYnkVQBpKBKeU+7zCJoLcc=
-github.com/RichardLQ/confs v0.0.0-20221026065624-518d7e4f2d95 h1:GwaTJj+LA5XnQfAVN6pdv1MF1FjHhvS6AyHTNofLsgg=
 github.com/RichardLQ/confs v0.0.0-20221026065624-518d7e4f2d95/go.mod h1:YqkNKD3jypceLCZHWHK60QKf03d6QQ3npCscg90xGcI=
 github.com/RichardLQ/confs v0.0.0-20221204092010-5cad330a2798 h1:Iu8hmcAxifsbUB42LEOhtMIsbA/BPnI4OVE3WnLXwks=
 github.com/RichardLQ/confs v0.0.0-20221204092010-5cad330a2798/go.mod h1:YqkNKD3jypceLCZHWHK60QKf03d6QQ3npCscg90xGcI=

@@ -3,9 +3,11 @@ package baidu
 import (
 	"fmt"
 	"github.com/RichardLQ/file-srv/auth"
+	"github.com/RichardLQ/file-srv/util/baidu"
 	"github.com/garyburd/redigo/redis"
 	"github.com/gin-gonic/gin"
 	"github.com/tidwall/gjson"
+	"mime/multipart"
 	"net/http"
 )
 //获取code
@@ -26,6 +28,36 @@ func GetBaiduAccessToken(c *gin.Context)  {
 	}
 	c.JSON(http.StatusOK, gin.H{"ret":"成功","token":token,"err":err,"code":http.StatusOK})
 	return
+}
+
+//GetBaiduPrecreate 预上传
+func GetBaiduPrecreate(c *gin.Context)  {
+	token,_:=c.GetPostForm("token")
+	files,_:=c.FormFile("files")
+	path := "/uploads/" + files.Filename
+	size := files.Size
+	var blockList []string
+	listString,_:=auth.FileOpenMD5(files)
+	blockList = append(blockList, listString)
+	arg := baidu.NewPrecreateArg(path, uint64(size), blockList)
+	if ret, err := baidu.Precreate(token, arg); err != nil {
+		fmt.Printf("[msg: precreate error] [err:%v]", err.Error())
+	} else {
+		fmt.Printf("ret:%+v", ret)
+		getBaiduSuperfile(ret.UploadId,path,token,files)
+
+	}
+}
+
+//GetBaiduSuperfile2 分片上传
+func getBaiduSuperfile(uploadId,path,token string,file *multipart.FileHeader)  {
+	partseq := 0
+	arg := baidu.NewUploadArg(uploadId, path, file, partseq)
+	if ret, err := baidu.Upload(token, arg); err != nil {
+		fmt.Printf("[msg: upload this part error] [err:%v]", err.Error())
+	} else {
+		fmt.Printf("ret:%+v", ret)
+	}
 }
 
 func getAccessToken() (string,error)  {
